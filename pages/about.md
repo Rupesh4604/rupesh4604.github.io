@@ -4,7 +4,7 @@ title: About
 permalink: /pages/about/
 ---
 
-Hi, I'm **Rupesh** â€” an IIT Bombay student interested in machine learning, algorithms, and ideas that bridge theory and practice.
+Hi, I'm **Rupesh** a Data Scientist & Software Engineer interested in deep learning, algorithms, and ideas that bridge theory and practice.
 
 This blog is where I think out loud: working through papers, books, and problems I find interesting. Posts range from technical deep-dives to book notes and half-formed opinions.
 
@@ -23,5 +23,5 @@ Use the **Archive** to browse by date, **Tags** to browse by topic, and the **ðŸ
 
 ## Get in touch
 
-- Email: [24m0319@iitb.ac.in](mailto:24m0319@iitb.ac.in)
-- GitHub: [@your-github-username](https://github.com/your-github-username)
+- Email: [rupesh32003@gmail.com](mailto:rupesh32003@gmail.com), [24m0319@iitb.ac.in](mailto:24m0319@iitb.ac.in)
+- GitHub: [@Rupesh4604](https://github.com/Rupesh4604)
