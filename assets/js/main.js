@@ -58,10 +58,15 @@
   async function loadIndex() {
     if (loaded) return;
     try {
-      // Resolve base URL from <base> or current origin
-      const base = document.querySelector('base')?.href || location.origin;
-      const url  = new URL('search.json', base).href;
+      if (typeof lunr !== 'function') {
+        throw new Error('Lunr search library failed to load.');
+      }
+
+      const url = window.SEARCH_INDEX_URL || '/search.json';
       const res  = await fetch(url);
+      if (!res.ok) {
+        throw new Error(`Search index request failed with ${res.status}.`);
+      }
       docs = await res.json();
 
       idx = lunr(function () {
@@ -75,8 +80,13 @@
       });
       loaded = true;
     } catch (e) {
-      console.warn('[search] could not load search.json', e);
+      showSearchError();
+      console.warn('[search] could not initialise search', e);
     }
+  }
+
+  function showSearchError() {
+    results.innerHTML = '<p class="search-empty">Search is unavailable right now.</p>';
   }
 
   /* ── Open / close ── */
@@ -119,7 +129,9 @@
     }
     if (!loaded || !idx) {
       results.innerHTML = '<p class="search-prompt">Loading index…</p>';
-      loadIndex().then(() => doSearch(q));
+      loadIndex().then(() => {
+        if (loaded && idx) doSearch(q);
+      });
       return;
     }
     doSearch(q);
