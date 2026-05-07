@@ -1,0 +1,47 @@
+---
+layout: default
+---
+
+<div class="home-hero">
+  <h1 class="home-title">{{ site.title }}</h1>
+  <p class="home-tagline">{{ site.tagline }}</p>
+</div>
+
+<!-- Active tag/topic filter pill (set by JS on tag click from sidebar) -->
+<div id="active-filter-bar" class="active-filter-bar" hidden>
+  Showing posts tagged: <strong id="active-filter-label"></strong>
+  <button id="clear-filter" aria-label="Clear filter">✕ clear</button>
+</div>
+
+<section class="post-list" id="post-list">
+  {% if paginator.posts %}
+    {% for post in paginator.posts %}
+      {% include post-card.html post=post %}
+    {% endfor %}
+  {% else %}
+    {% for post in site.posts %}
+      {% include post-card.html post=post %}
+    {% endfor %}
+  {% endif %}
+</section>
+
+<!-- Pagination -->
+{% if paginator.total_pages > 1 %}
+<nav class="pagination" aria-label="Page navigation">
+  {% if paginator.previous_page %}
+    <a class="pagination-btn" href="{{ paginator.previous_page_path | relative_url }}">← Newer</a>
+  {% else %}
+    <span class="pagination-btn disabled">← Newer</span>
+  {% endif %}
+
+  <span class="pagination-info">
+    Page {{ paginator.page }} of {{ paginator.total_pages }}
+  </span>
+
+  {% if paginator.next_page %}
+    <a class="pagination-btn" href="{{ paginator.next_page_path | relative_url }}">Older →</a>
+  {% else %}
+    <span class="pagination-btn disabled">Older →</span>
+  {% endif %}
+</nav>
+{% endif %}

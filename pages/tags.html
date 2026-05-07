@@ -1,0 +1,49 @@
+---
+layout: default
+title: Tags
+permalink: /pages/tags/
+description: "Browse all posts by topic"
+---
+
+<header class="page-header">
+  <h1 class="page-title">Tags</h1>
+  <p class="page-description">Browse posts by topic. Click any tag to jump to that section.</p>
+</header>
+
+<!-- Tag filter cloud -->
+<div class="tags-filter-bar">
+  {% assign all_tags = site.posts | map: "tags" | join: "," | split: "," | uniq | sort %}
+  {% for tag in all_tags %}
+    {% assign tag = tag | strip %}
+    {% assign count = site.posts | where_exp: "p", "p.tags contains tag" | size %}
+    <a href="#{{ tag | slugify }}" class="tag-chip">
+      {{ tag }} <span class="tag-count">{{ count }}</span>
+    </a>
+  {% endfor %}
+</div>
+
+<!-- Posts grouped by tag -->
+{% assign all_tags = site.posts | map: "tags" | join: "," | split: "," | uniq | sort %}
+{% for tag in all_tags %}
+  {% assign tag = tag | strip %}
+  {% assign tagged_posts = site.posts | where_exp: "p", "p.tags contains tag" | sort: "date" | reverse %}
+
+  <section class="tags-section" id="{{ tag | slugify }}">
+    <div class="tag-section-header">
+      <span class="tag-chip">{{ tag }}</span>
+      <span class="tag-post-count">{{ tagged_posts.size }} post{% if tagged_posts.size != 1 %}s{% endif %}</span>
+    </div>
+    <ul class="tag-post-list">
+      {% for post in tagged_posts %}
+        <li>
+          <time>{{ post.date | date: "%b %-d, %Y" }}</time>
+          <a href="{{ post.url | relative_url }}">{{ post.title }}</a>
+          {% if post.series %}
+            {% assign sm = site.data.series | where: "slug", post.series | first %}
+            <span class="series-badge">{{ sm.cover_emoji | default: "📚" }} Part {{ post.series_part }}</span>
+          {% endif %}
+        </li>
+      {% endfor %}
+    </ul>
+  </section>
+{% endfor %}

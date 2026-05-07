@@ -1,0 +1,20 @@
+# Define your blog series here.
+# Each entry must have a unique `slug` that matches the `series:` field in post front matter.
+
+- slug: "understanding-transformers"
+  title: "Understanding Transformers"
+  description: "A ground-up exploration of the Transformer architecture — from basic attention to modern LLMs. Each part builds on the previous."
+  cover_emoji: "🤖"
+  tags: [machine-learning, deep-learning, nlp]
+
+- slug: "mit-6006-notes"
+  title: "MIT 6.006 — Intro to Algorithms (Notes)"
+  description: "My running notes while going through MIT's 6.006 course — algorithms, data structures, and problem-solving techniques."
+  cover_emoji: "📐"
+  tags: [algorithms, cs-fundamentals]
+
+- slug: "book-notes-rationality"
+  title: "Book Notes: Rationality & Decision-Making"
+  description: "Notes and reflections across books on human judgment, cognitive biases, and rational thinking."
+  cover_emoji: "📚"
+  tags: [books, rationality, cognitive-science]

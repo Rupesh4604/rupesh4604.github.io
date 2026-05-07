@@ -1,0 +1,63 @@
+---
+layout: default
+title: Series
+permalink: /pages/series/
+description: "Multi-part explorations on focused topics"
+---
+
+<header class="page-header">
+  <h1 class="page-title">Series</h1>
+  <p class="page-description">
+    Longer explorations split into ordered parts. Read them in sequence for the full picture.
+  </p>
+</header>
+
+{% for s in site.data.series %}
+  {% assign series_posts = site.posts | where: "series", s.slug | sort: "series_part" %}
+  {% if series_posts.size > 0 %}
+
+  <div class="series-card" id="{{ s.slug }}">
+    <div class="series-card-header">
+      <span class="series-card-emoji">{{ s.cover_emoji | default: "📚" }}</span>
+      <div>
+        <h2 class="series-card-title">{{ s.title }}</h2>
+        {% if s.tags.size > 0 %}
+          <div class="series-card-tags">
+            {% for tag in s.tags %}
+              <a href="{{ '/pages/tags' | relative_url }}#{{ tag | slugify }}" class="tag-chip small">{{ tag }}</a>
+            {% endfor %}
+          </div>
+        {% endif %}
+      </div>
+    </div>
+
+    {% if s.description %}
+      <p class="series-card-desc">{{ s.description }}</p>
+    {% endif %}
+
+    <ol class="series-post-ol">
+      {% for post in series_posts %}
+        <li>
+          <span class="series-post-num">{{ post.series_part }}</span>
+          <a href="{{ post.url | relative_url }}">{{ post.title }}</a>
+          <time class="series-post-date">{{ post.date | date: "%b %-d, %Y" }}</time>
+        </li>
+      {% endfor %}
+    </ol>
+  </div>
+
+  {% endif %}
+{% endfor %}
+
+{% assign has_series = false %}
+{% for s in site.data.series %}
+  {% assign sp = site.posts | where: "series", s.slug %}
+  {% if sp.size > 0 %}{% assign has_series = true %}{% endif %}
+{% endfor %}
+
+{% unless has_series %}
+  <p style="color: var(--text-muted); font-family: var(--font-ui);">
+    No series yet. Add <code>series: your-series-slug</code> and <code>series_part: 1</code>
+    to a post's front matter, and define the series in <code>_data/series.yml</code>.
+  </p>
+{% endunless %}

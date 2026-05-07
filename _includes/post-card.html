@@ -1,0 +1,42 @@
+{% comment %}
+  Post Card Include
+  Usage: {% include post-card.html post=post %}
+{% endcomment %}
+
+{% assign p = include.post %}
+{% assign words = p.content | number_of_words %}
+{% assign read_time = words | divided_by: 200 | plus: 1 %}
+
+<article class="post-card">
+  <div class="post-card-meta">
+    <time datetime="{{ p.date | date_to_xmlschema }}">{{ p.date | date: "%b %-d, %Y" }}</time>
+    <span class="meta-sep">·</span>
+    <span>{{ read_time }} min read</span>
+    {% if p.series %}
+      {% assign series_meta = site.data.series | where: "slug", p.series | first %}
+      <span class="meta-sep">·</span>
+      <a class="series-badge" href="{{ '/pages/series' | relative_url }}#{{ p.series }}">
+        {{ series_meta.cover_emoji | default: "📚" }} {{ series_meta.title | default: p.series }}
+        <span class="series-part-badge">Part {{ p.series_part }}</span>
+      </a>
+    {% endif %}
+  </div>
+
+  <h2 class="post-card-title">
+    <a href="{{ p.url | relative_url }}">{{ p.title }}</a>
+  </h2>
+
+  {% if p.excerpt %}
+    <p class="post-card-excerpt">{{ p.excerpt | strip_html | truncatewords: 40 }}</p>
+  {% endif %}
+
+  {% if p.tags.size > 0 %}
+    <div class="post-card-tags">
+      {% for tag in p.tags %}
+        <a href="{{ '/pages/tags' | relative_url }}#{{ tag | slugify }}" class="tag-chip small">{{ tag }}</a>
+      {% endfor %}
+    </div>
+  {% endif %}
+
+  <a class="read-more-link" href="{{ p.url | relative_url }}">Read more →</a>
+</article>

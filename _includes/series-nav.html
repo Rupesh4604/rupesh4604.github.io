@@ -1,0 +1,70 @@
+{% comment %}
+  Series Navigation Box
+  Usage: {% include series-nav.html %}
+  Requires: page.series  (slug matching _data/series.yml)
+             page.series_part  (1-based integer)
+{% endcomment %}
+
+{% if page.series %}
+  {% assign series_posts = site.posts | where: "series", page.series | sort: "series_part" %}
+  {% assign series_meta  = site.data.series | where: "slug", page.series | first %}
+
+  {% if series_posts.size > 1 %}
+  <aside class="series-nav-box">
+    <div class="series-nav-header">
+      <span class="series-nav-emoji">{{ series_meta.cover_emoji | default: "📚" }}</span>
+      <div>
+        <p class="series-nav-label">Part of a series</p>
+        <h3 class="series-nav-title">
+          <a href="{{ '/pages/series' | relative_url }}#{{ page.series }}">{{ series_meta.title }}</a>
+        </h3>
+      </div>
+    </div>
+
+    {% if series_meta.description %}
+      <p class="series-nav-desc">{{ series_meta.description }}</p>
+    {% endif %}
+
+    <ol class="series-nav-list">
+      {% for sp in series_posts %}
+        <li class="{% if sp.url == page.url %}series-nav-current{% endif %}">
+          {% if sp.url == page.url %}
+            <span class="series-part-indicator">▶</span>
+            <span class="series-nav-post-title">{{ sp.title }}</span>
+            <span class="series-nav-badge">reading now</span>
+          {% else %}
+            <span class="series-part-indicator">{{ sp.series_part }}</span>
+            <a href="{{ sp.url | relative_url }}" class="series-nav-post-title">{{ sp.title }}</a>
+          {% endif %}
+        </li>
+      {% endfor %}
+    </ol>
+
+    {% comment %} Prev / Next within series {% endcomment %}
+    {% assign current_index = 0 %}
+    {% for sp in series_posts %}
+      {% if sp.url == page.url %}{% assign current_index = forloop.index0 %}{% endif %}
+    {% endfor %}
+
+    <div class="series-nav-footer">
+      {% assign prev_index = current_index | minus: 1 %}
+      {% if current_index > 0 %}
+        {% assign prev_part = series_posts[prev_index] %}
+        <a class="series-nav-arrow" href="{{ prev_part.url | relative_url }}">
+          ← {{ prev_part.title }}
+        </a>
+      {% else %}
+        <span></span>
+      {% endif %}
+
+      {% assign next_index = current_index | plus: 1 %}
+      {% if next_index < series_posts.size %}
+        {% assign next_part = series_posts[next_index] %}
+        <a class="series-nav-arrow series-nav-arrow--next" href="{{ next_part.url | relative_url }}">
+          {{ next_part.title }} →
+        </a>
+      {% endif %}
+    </div>
+  </aside>
+  {% endif %}
+{% endif %}

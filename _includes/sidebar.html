@@ -1,0 +1,98 @@
+<!-- ═══════════════════════════════════
+     SIDEBAR
+     ═══════════════════════════════════ -->
+
+<!-- ── Series ── -->
+{% if site.data.series.size > 0 %}
+<div class="sidebar-section">
+  <h3 class="sidebar-heading">
+    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24"
+         fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>
+    </svg>
+    Series
+  </h3>
+  <ul class="sidebar-series-list">
+    {% for s in site.data.series %}
+      {% assign series_posts = site.posts | where: "series", s.slug %}
+      {% if series_posts.size > 0 %}
+        <li>
+          <a href="{{ '/pages/series' | relative_url }}#{{ s.slug }}">
+            <span class="series-emoji">{{ s.cover_emoji }}</span>
+            <span class="series-title-text">{{ s.title }}</span>
+          </a>
+          <span class="series-count">{{ series_posts.size }}</span>
+        </li>
+      {% endif %}
+    {% endfor %}
+  </ul>
+</div>
+{% endif %}
+
+<!-- ── Tags ── -->
+{% assign all_tags = site.posts | map: "tags" | join: "," | split: "," | uniq | sort %}
+{% if all_tags.size > 0 %}
+<div class="sidebar-section">
+  <h3 class="sidebar-heading">
+    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24"
+         fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/>
+      <line x1="7" y1="7" x2="7.01" y2="7"/>
+    </svg>
+    Tags
+  </h3>
+  <div class="tag-cloud">
+    {% for tag in all_tags %}
+      {% assign tag_stripped = tag | strip %}
+      {% assign count = site.posts | where_exp: "p", "p.tags contains tag_stripped" | size %}
+      <a href="{{ '/pages/tags' | relative_url }}#{{ tag_stripped | slugify }}"
+         class="tag-chip sidebar-tag" data-count="{{ count }}">
+        {{ tag_stripped }}
+        <span class="tag-count">{{ count }}</span>
+      </a>
+    {% endfor %}
+  </div>
+</div>
+{% endif %}
+
+<!-- ── Recent Posts ── -->
+<div class="sidebar-section">
+  <h3 class="sidebar-heading">
+    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24"
+         fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+      <circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>
+    </svg>
+    Recent Posts
+  </h3>
+  <ul class="sidebar-recent-list">
+    {% for post in site.posts limit: 5 %}
+      <li>
+        <a href="{{ post.url | relative_url }}">{{ post.title }}</a>
+        <time class="sidebar-date">{{ post.date | date: "%b %-d, %Y" }}</time>
+      </li>
+    {% endfor %}
+  </ul>
+</div>
+
+<!-- ── Archive by Year ── -->
+<div class="sidebar-section">
+  <h3 class="sidebar-heading">
+    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24"
+         fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+      <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/>
+      <line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/>
+    </svg>
+    Archive
+  </h3>
+  <ul class="sidebar-archive-list">
+    {% assign postsByYear = site.posts | group_by_exp: "p", "p.date | date: '%Y'" %}
+    {% for year in postsByYear %}
+      <li>
+        <a href="{{ '/pages/archive' | relative_url }}#{{ year.name }}">
+          {{ year.name }}
+          <span class="archive-count">{{ year.items | size }}</span>
+        </a>
+      </li>
+    {% endfor %}
+  </ul>
+</div>
