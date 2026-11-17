@@ -8,7 +8,7 @@ description: "A personal blog on technology, research, books, and more."
 # GitHub Pages URL — update after you create the repo
 # For username.github.io repos use: https://username.github.io
 # For project repos use: https://username.github.io  +  baseurl: /repo-name
-url: "https://rupesh4604.github.io/"
+url: "https://blog.rupeshmediboyina.dev"
 baseurl: ""
 
 author:
